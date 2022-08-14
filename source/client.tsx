@@ -1,13 +1,13 @@
+import type { Request } from "express";
+import type { NextPage, NextPageContext } from "next";
+import type { NormalizedCacheObject } from "@apollo/client/index.js";
 import {
   ApolloClient,
   ApolloProvider,
   InMemoryCache,
-  NormalizedCacheObject,
 } from "@apollo/client/index.js";
-import { NextPage, NextPageContext } from "next";
 import React, { ComponentProps } from "react";
 import { SchemaLink } from "@apollo/client/link/schema/index.js";
-import { Request } from "express";
 import { defaultPath } from "./config.json";
 
 interface Props {

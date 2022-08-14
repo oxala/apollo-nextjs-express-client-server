@@ -1,4 +1,6 @@
 {
+  "restoreMocks": true,
+  "resetModules": true,
   "transform": {
     "^.+\\.(t|j)s$": "ts-jest"
   },

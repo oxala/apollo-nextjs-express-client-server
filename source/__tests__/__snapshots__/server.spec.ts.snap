@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Given express application Given graphql schema should start graphql server and apply it to the middleware 1`] = `
+Object {
+  "cache": "bounded",
+  "context": [Function],
+  "csrfPrevention": true,
+  "plugins": Array [
+    "ApolloServerPluginLandingPageGraphQLPlayground",
+    "ApolloServerPluginDrainHttpServer",
+  ],
+  "schema": "schema",
+}
+`;

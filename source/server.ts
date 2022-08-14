@@ -1,11 +1,11 @@
+import type { GraphQLSchema } from "graphql";
+import type { Application } from "express";
 import { createServer } from "http";
 import { ApolloServer } from "apollo-server-express";
 import {
   ApolloServerPluginLandingPageGraphQLPlayground,
   ApolloServerPluginDrainHttpServer,
 } from "apollo-server-core";
-import { GraphQLSchema } from "graphql";
-import { Application } from "express";
 import { defaultPath } from "./config.json";
 
 export const attachGraphQL = async (
