@@ -14,6 +14,7 @@ await Promise.all([
   build({
     ...opts,
     format: "cjs",
+    outExtension: { ".js": ".cjs" },
   }),
   build({
     ...opts,

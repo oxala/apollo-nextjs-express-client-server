@@ -1,7 +1,7 @@
 import type { GraphQLSchema } from "graphql";
 import type { Application } from "express";
 import { createServer } from "http";
-import { ApolloServer } from "apollo-server-express";
+import { ApolloServer, ServerRegistration } from "apollo-server-express";
 import {
   ApolloServerPluginLandingPageGraphQLPlayground,
   ApolloServerPluginDrainHttpServer,
@@ -13,9 +13,11 @@ export const attachGraphQL = async (
   config: {
     schema?: GraphQLSchema;
     endpoint?: string;
+    noServer?: boolean;
+    serverConfig?: Omit<ServerRegistration, "app" | "path">;
   } = {}
 ) => {
-  const { schema, endpoint = defaultPath } = config;
+  const { schema, endpoint = defaultPath, noServer, serverConfig } = config;
 
   app.all("*", (req, _, next) => {
     req.graphqlSchema = schema;
@@ -24,7 +26,7 @@ export const attachGraphQL = async (
     next();
   });
 
-  if (schema) {
+  if (schema && !noServer) {
     const httpServer = createServer(app);
     const apolloServer = new ApolloServer({
       schema,
@@ -39,6 +41,6 @@ export const attachGraphQL = async (
 
     await apolloServer.start();
 
-    apolloServer.applyMiddleware({ app, path: endpoint });
+    apolloServer.applyMiddleware({ app, path: endpoint, ...serverConfig });
   }
 };

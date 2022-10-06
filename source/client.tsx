@@ -1,13 +1,14 @@
 import type { Request } from "express";
 import type { NextPage, NextPageContext } from "next";
-import type { NormalizedCacheObject } from "@apollo/client/index.js";
+import type { SchemaLink } from "@apollo/client/link/schema";
 import {
   ApolloClient,
   ApolloProvider,
   InMemoryCache,
+  InMemoryCacheConfig,
+  NormalizedCacheObject,
 } from "@apollo/client/index.js";
 import React, { ComponentProps } from "react";
-import { SchemaLink } from "@apollo/client/link/schema/index.js";
 import { defaultPath } from "./config.json";
 
 interface Props {
@@ -25,10 +26,11 @@ const getClient = (
   config: {
     link?: SchemaLink;
     uri?: string;
-  } = {}
+  } = {},
+  cacheConfig?: InMemoryCacheConfig
 ) => {
   const { link, uri = defaultPath } = config;
-  const cache = new InMemoryCache().restore(apolloState);
+  const cache = new InMemoryCache(cacheConfig).restore(apolloState);
 
   if (typeof window === "undefined") {
     return new ApolloClient({ ssrMode: true, cache, link });
@@ -45,8 +47,11 @@ const getClient = (
   return cachedApolloClient;
 };
 
-export const withApollo = (Page: NextPage, config: { ssr?: boolean } = {}) => {
-  const { ssr = true } = config;
+export const withApollo = (
+  Page: NextPage,
+  config: { ssr?: boolean; cacheConfig?: InMemoryCacheConfig } = {}
+) => {
+  const { ssr = true, cacheConfig } = config;
   type WithApolloProps = Props & ComponentProps<typeof Page>;
 
   const WithApollo: NextPage<WithApolloProps> = ({
@@ -55,7 +60,8 @@ export const withApollo = (Page: NextPage, config: { ssr?: boolean } = {}) => {
     apolloConfig,
     ...pageProps
   }) => {
-    const client = apolloClient || getClient(apolloState, apolloConfig);
+    const client =
+      apolloClient || getClient(apolloState, apolloConfig, cacheConfig);
 
     return (
       <ApolloProvider client={client}>
@@ -77,11 +83,15 @@ export const withApollo = (Page: NextPage, config: { ssr?: boolean } = {}) => {
           "@apollo/client/link/schema/index.js"
         );
 
-        apolloClient = getClient(undefined, {
-          link: new SchemaLink({ schema, context }),
-        });
+        apolloClient = getClient(
+          undefined,
+          {
+            link: new SchemaLink({ schema, context }),
+          },
+          cacheConfig
+        );
       } else {
-        apolloClient = getClient(undefined, { uri });
+        apolloClient = getClient(undefined, { uri }, cacheConfig);
       }
 
       if (Page.getInitialProps) {
@@ -128,3 +138,5 @@ export const withApollo = (Page: NextPage, config: { ssr?: boolean } = {}) => {
 
   return WithApollo;
 };
+
+export const useClient = () => cachedApolloClient;

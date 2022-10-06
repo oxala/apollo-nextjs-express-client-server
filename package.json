@@ -1,17 +1,18 @@
 {
-  "name": "apollo-nextjs-express-client-server",
-  "version": "0.1.0",
+  "name": "with-apollo-next-express",
+  "version": "0.1.9",
   "description": "",
   "exports": {
     "./client": {
       "import": "./lib/client.mjs",
-      "default": "./lib/client.js"
+      "default": "./lib/client.cjs"
     },
     "./server": {
       "import": "./lib/server.mjs",
-      "default": "./lib/server.js"
+      "default": "./lib/server.cjs"
     }
   },
+  "type": "module",
   "scripts": {
     "clean": "rm -rf lib && tsc -b --clean",
     "prebuild": "yarn clean",
@@ -25,11 +26,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:oxala/apollo-nextjs-express-client-server.git"
+    "url": "git@github.com:oxala/with-apollo-next-express.git"
   },
   "keywords": [
     "apollo",
-    "nextjs",
+    "next",
     "graphql",
     "ssr",
     "express",
@@ -37,17 +38,17 @@
   ],
   "author": "Glebs Riskovs",
   "license": "MIT",
-  "homepage": "https://github.com/oxala/apollo-nextjs-express-client-server#readme",
+  "homepage": "https://github.com/oxala/with-apollo-next-express#readme",
   "dependencies": {
     "apollo-server-core": "^3.10.1",
     "apollo-server-express": "^3.10.1"
   },
   "peerDependencies": {
     "@apollo/client": "^3",
-    "express": "^4",
-    "graphql": "^16",
-    "next": "^12",
-    "react": "^18"
+    "express": "^4.0.0",
+    "graphql": "^16.0.0",
+    "next": "^12.0.0",
+    "react": "^18.0.0"
   },
   "devDependencies": {
     "@apollo/client": "^3.6.9",
